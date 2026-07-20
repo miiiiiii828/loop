@@ -6,7 +6,7 @@ html,body{margin:0;background:#8fc5bd;color:#255f58;font-family:"Helvetica Neue"
 header{height:82px;position:relative;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 30px;background:#d9f2ed9c;border-bottom:1px solid #fff9;backdrop-filter:blur(25px)}
 .circle-brand{font-size:35px;font-weight:900;letter-spacing:-3px}
 .circle-brand span{font-size:10px;color:var(--pink);vertical-align:top;margin-left:8px;text-shadow:0 0 13px #ff76ad}
-header p{margin:0;font-size:8px;font-weight:800;letter-spacing:.18em}
+header p{margin:0;display:flex;align-items:center;gap:12px;font-size:8px;font-weight:800;letter-spacing:.18em}header p b{padding-left:12px;border-left:1px solid #285b5452;color:var(--pink);font-size:9px;letter-spacing:.1em}
 header>button{justify-self:end;width:43px;height:43px;border-radius:50%;border:2px solid #fff;background:#a9dbd2;color:#255e58;font-size:19px;box-shadow:inset 0 3px 8px #fff,0 8px 20px #3b736b2a;cursor:pointer}
 .spin{animation:spin 1s linear infinite}
 .cosmos{height:720px;position:relative;z-index:2}
@@ -18,6 +18,7 @@ header>button{justify-self:end;width:43px;height:43px;border-radius:50%;border:2
 .core>b{font-size:76px;line-height:.9;letter-spacing:-7px;z-index:1}
 .core>b span{font-size:24px;letter-spacing:-2px}
 .core p{font-size:9px;font-weight:800;z-index:1}
+.core em{margin:2px 0 7px;padding:5px 8px;border:1px solid #ffffff85;border-radius:999px;color:#184c46;font-size:7px;font-style:normal;font-weight:900;letter-spacing:.1em;z-index:1}
 .core i{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 14px var(--pink);z-index:1}
 .planet{z-index:9;padding:18px;cursor:pointer;transition:.3s;color:#245c56}
 .planet:hover,.planet.active{transform:scale(1.07);z-index:15}
@@ -55,6 +56,7 @@ header>button{justify-self:end;width:43px;height:43px;border-radius:50%;border:2
 .next-title{left:6%;top:62px;width:255px;height:255px;background:radial-gradient(circle at 35% 25%,#fff,#bae4da 50%,#78b1a5)}
 .next-title small{font-size:7px;font-weight:900;letter-spacing:.14em}
 .next-title h2{font-size:37px;line-height:.85;letter-spacing:-3px;margin:8px 0}
+.next-title em{margin-top:9px;color:#275e57;font-size:8px;font-style:normal;font-weight:900;letter-spacing:.14em}
 .next-planet{top:52px;width:245px;height:245px;padding:42px;background:radial-gradient(circle at 35% 24%,#fff,#c5e5df 50%,#91bab4);cursor:pointer;transition:.25s}
 .next-planet:hover,.next-planet:focus-visible{transform:translateY(-8px);box-shadow:0 22px 55px #183c3645,0 0 0 4px #ff64b6}
 .next-planet.started{background:radial-gradient(circle at 35% 24%,#fff4fb,#ffb7dc 48%,#e75a9f)}
