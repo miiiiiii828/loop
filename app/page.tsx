@@ -14,19 +14,23 @@ const tomorrowMeta=[
 export default function Home(){
  const [report,setReport]=useState(data),[selected,setSelected]=useState<Key>("owe"),[analyzing,setAnalyzing]=useState(false);
  const [selectedTomorrow,setSelectedTomorrow]=useState<number|null>(null),[started,setStarted]=useState<number[]>([]);
- const analyze=async()=>{setAnalyzing(true);try{const events=[{app:"Photoshop",detail:"BYREDO_space_v08.psd edited"},{app:"After Effects",detail:"ASICS_vertical_v12.aep newer than render"},{app:"Mail",detail:"Eddie question received, no reply"},{app:"Finder",detail:"Estimate edited, not shared"}];const r=await fetch("/api/analyze-day",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({events})});if(r.ok)setReport(await r.json())}catch{}finally{setTimeout(()=>setAnalyzing(false),600)}};
- useEffect(()=>{const t=setTimeout(analyze,400);return()=>clearTimeout(t)},[]);
+ const [now,setNow]=useState<Date|null>(null),[analyzedAt,setAnalyzedAt]=useState<Date|null>(null);
+ const dateLabel=(value:Date|null)=>value?value.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}).toUpperCase().replace(","," ·"):"TODAY";
+ const timeLabel=(value:Date|null)=>value?value.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}):"—";
+ const tomorrow=now?new Date(now.getFullYear(),now.getMonth(),now.getDate()+1):null;
+ const analyze=async()=>{setAnalyzing(true);try{const events=[{app:"Photoshop",detail:"BYREDO_space_v08.psd edited"},{app:"After Effects",detail:"ASICS_vertical_v12.aep newer than render"},{app:"Mail",detail:"Eddie question received, no reply"},{app:"Finder",detail:"Estimate edited, not shared"}];const r=await fetch("/api/analyze-day",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({events})});if(r.ok)setReport(await r.json())}catch{}finally{setAnalyzedAt(new Date());setTimeout(()=>setAnalyzing(false),600)}};
+ useEffect(()=>{const current=new Date();setNow(current);setAnalyzedAt(current);const t=setTimeout(analyze,400);const clock=setInterval(()=>setNow(new Date()),30000);return()=>{clearTimeout(t);clearInterval(clock)}},[]);
  return <main className="circle-shell"><div className="circle-grain"/>
-  <header><div className="circle-brand">LOOP<span>●</span></div><p>YOUR WORK, UNDERSTOOD</p><button className={analyzing?"spin":""} onClick={analyze}>{analyzing?"···":"↻"}</button></header>
+  <header><div className="circle-brand">LOOP<span>●</span></div><p><span>YOUR WORK, UNDERSTOOD</span><b>{dateLabel(now)} · {timeLabel(now)}</b></p><button className={analyzing?"spin":""} onClick={analyze}>{analyzing?"···":"↻"}</button></header>
   <section className="cosmos">
    <div className="waterline"/>
-   <div className="core"><small>TODAY’S<br/>CLOSURE</small><b>68<span>%</span></b><p>3 loops remain</p><i/></div>
+   <div className="core"><small>TODAY’S<br/>CLOSURE</small><b>68<span>%</span></b><p>3 loops remain</p><em>LAST ANALYZED · {timeLabel(analyzedAt)}</em><i/></div>
    {(Object.keys(labels) as Key[]).map(key=><button key={key} className={"planet "+key+(selected===key?" active":"")} onClick={()=>setSelected(key)}><small>{labels[key]}</small><b>{report[key].length.toString().padStart(2,"0")}</b><span>{key==="done"?"COMPLETE":key==="waiting"?"PENDING":"ACTION"}</span></button>)}
    <div className={"detail-orb "+selected}><small>SELECTED LOOP</small><h1>{labels[selected]}</h1><div>{report[selected].map((x,i)=><p key={x}><b>0{i+1}</b><span>{x}</span></p>)}</div><button>{selected==="waiting"?"CHECK STATUS":"OPEN ITEMS"} ↗</button></div>
    <div className="apps-orbit">{apps.map(([short,name],i)=><div className={"app-dot d"+i} key={name}><b>{short}</b><small>{name}</small></div>)}</div>
    <div className="orbit-ring r1"/><div className="orbit-ring r2"/><div className="orbit-ring r3"/>
   </section>
-  <section className="next-world"><div className="next-title"><small>NEXT ORBIT</small><h2>Tomorrow,<br/>start here.</h2></div>{report.tomorrow.map((x,i)=><button aria-haspopup="dialog" aria-label={`Open tomorrow task: ${x}`} onClick={()=>setSelectedTomorrow(i)} className={"next-planet n"+i+(started.includes(i)?" started":"")} key={x}><b>{started.includes(i)?"READY":`0${i+1}`}</b><span>{x}</span><i>↗</i></button>)}<div className="mirror-word">TOMORROW</div></section>
+  <section className="next-world"><div className="next-title"><small>NEXT ORBIT</small><h2>Tomorrow,<br/>start here.</h2><em>{dateLabel(tomorrow)}</em></div>{report.tomorrow.map((x,i)=><button aria-haspopup="dialog" aria-label={`Open tomorrow task: ${x}`} onClick={()=>setSelectedTomorrow(i)} className={"next-planet n"+i+(started.includes(i)?" started":"")} key={x}><b>{started.includes(i)?"READY":`0${i+1}`}</b><span>{x}</span><i>↗</i></button>)}<div className="mirror-word">TOMORROW</div></section>
   {selectedTomorrow!==null&&<div className="tmr-overlay" role="presentation" onClick={()=>setSelectedTomorrow(null)}>
    <section className="tmr-orb" role="dialog" aria-modal="true" aria-labelledby="tmr-title" onClick={e=>e.stopPropagation()}>
     <button className="tmr-close" aria-label="Close tomorrow task" onClick={()=>setSelectedTomorrow(null)}>×</button>
